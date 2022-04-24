@@ -3,9 +3,9 @@
  */
 package gui;
 
-import game.BoardController;
-import game.Coordinate;
-import game.Square;
+import game.Schachbrettkontroller;
+import game.Koordinaten;
+import game.Quadrat;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,7 +18,7 @@ import player.PlayerType;
 
 
 public class GameGUI {
-    private BoardController boardController;
+    private Schachbrettkontroller brettkontroller;
     private JButton lastSelection = null;
     static JButton resign, newGame, save, restore;
     private JLabel lblscoreCounter = new JLabel();
@@ -35,7 +35,7 @@ public class GameGUI {
     }
 
     public GameGUI() {
-        boardController = new BoardController();
+        brettkontroller = new Schachbrettkontroller();
         initializeGui();
 
     }
@@ -49,7 +49,7 @@ public class GameGUI {
         panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
-        lblscoreCounter.setText("SCORE: " + "White(" + whitecounter + ") " + " Black(" +blackcounter + ") ");
+        lblscoreCounter.setText("SCORE: " + "White(" + whitecounter + ") " + " Black(" + blackcounter + ") ");
         lblPlayerTurn.setText("White has First Move ");
 
 
@@ -74,7 +74,7 @@ public class GameGUI {
              @Override
             public void actionPerformed(ActionEvent e) {
                 Listener acL = new Listener();
-                boardController.resetBoard();
+                brettkontroller.resetBoard();
                 acL.updateBoard();
                 }
         });
@@ -98,7 +98,7 @@ public class GameGUI {
 
         gameFrame.setLayout(new BorderLayout());
 
-        gameFrame window = new gameFrame(boardController.getBoard().getSquares());
+        gameFrame window = new gameFrame(brettkontroller.getBoard().getQuadraten());
 
         mainPanel.add(panel);
         mainPanel.add(window);
@@ -113,12 +113,12 @@ public class GameGUI {
     public class Listener implements ActionListener {
 
         public void updateBoard() {
-            Square[][] squares = boardController.getBoard().getSquares();
+            Quadrat[][] squares = brettkontroller.getBoard().getQuadraten();
             for (int row = 0; row <= 7; row++) {
                 for (int col = 0; col <= 7; col++) {
                     JButton button;
-                    Square square;
-                    if (boardController.getCurrentPlayer() == PlayerType.BLACK) {
+                    Quadrat square;
+                    if (brettkontroller.getCurrentPlayer() == PlayerType.BLACK) {
                         button = allButtons[col][row];
                         square = squares[row][col];
                     } else {
@@ -128,7 +128,7 @@ public class GameGUI {
 
 
                     int offset = 1;
-                    if (boardController.getCurrentPlayer() == PlayerType.WHITE) {
+                    if (brettkontroller.getCurrentPlayer() == PlayerType.WHITE) {
                         offset = 0;
                     }
                     if ((row + col + offset) % 2 == 0) {
@@ -170,33 +170,33 @@ public class GameGUI {
             Point rv = new Point();
             int selectionX = button.getLocation(rv).x / 80;
             int selectionY = button.getLocation(rv).y / 80;
-            if (boardController.getCurrentPlayer() == PlayerType.WHITE) {
+            if (brettkontroller.getCurrentPlayer() == PlayerType.WHITE) {
                 selectionY = 7 - selectionY;
             }
-            Coordinate currentCoordinate = new Coordinate(selectionX, selectionY);
+            Koordinaten currentCoordinate = new Koordinaten(selectionX, selectionY);
 
             boolean moved = false;
             if (lastSelection != null) {
                 selectionX = lastSelection.getLocation(rv).x / 80;
                 selectionY = lastSelection.getLocation(rv).y / 80;
-                if (boardController.getCurrentPlayer() == PlayerType.WHITE) {
+                if (brettkontroller.getCurrentPlayer() == PlayerType.WHITE) {
                     selectionY = 7 - selectionY;
                 }
-                Coordinate lastCoordinate = new Coordinate(selectionX, selectionY);
-                moved = boardController.move(lastCoordinate, currentCoordinate);
+                Koordinaten lastCoordinate = new Koordinaten(selectionX, selectionY);
+                moved = brettkontroller.move(lastCoordinate, currentCoordinate);
 
                 if (moved) {
-                    if (boardController.confirmEnd(boardController.getBoard().getSquare(currentCoordinate))) {
+                    if (brettkontroller.confirmEnd(brettkontroller.getBoard().getQuadraten(currentCoordinate))) {
 
-                        Square square = boardController.getBoard().getSquare(currentCoordinate);
+                        Quadrat square = brettkontroller.getBoard().getQuadraten(currentCoordinate);
 
                         if( square.getBauer().getPlayer() == PlayerType.WHITE){
                             whitecounter = whitecounter+1;
-                            boardController.inOpponentSquare(boardController.getBoard().getSquare(currentCoordinate),  "White Player has won the game");
-                            lblscoreCounter.setText("SCORE: " + "White(" +whitecounter + ") " + " Black(" +blackcounter + ") ");
+                            brettkontroller.inOpponentSquare(brettkontroller.getBoard().getQuadraten(currentCoordinate),  "White Player has won the game");
+                            lblscoreCounter.setText("SCORE: " + "White(" +whitecounter + ") " + " Black(" + blackcounter + ") ");
                             lblPlayerTurn.setText("GAME OVER!!! WHITE HAS WON THE GAME");
-                            if(boardController.restart()){
-                                boardController.resetBoard();
+                            if(brettkontroller.restart()){
+                                brettkontroller.resetBoard();
                                 updateBoard();
                             }
                             else{
@@ -205,11 +205,11 @@ public class GameGUI {
                         }
                         else if(square.getBauer().getPlayer() == PlayerType.BLACK){
                             blackcounter = blackcounter+1;
-                            boardController.inOpponentSquare(boardController.getBoard().getSquare(currentCoordinate),  "BLACK Player has won the game");
+                            brettkontroller.inOpponentSquare(brettkontroller.getBoard().getQuadraten(currentCoordinate),  "BLACK Player has won the game");
                             lblscoreCounter.setText("SCORE: " + "White(" +whitecounter + ") " + " Black(" +blackcounter + ") ");
                             lblPlayerTurn.setText("GAME OVER!!! BLACK HAS WON THE GAME");
-                            if(boardController.restart()){
-                                boardController.resetBoard();
+                            if(brettkontroller.restart()){
+                                brettkontroller.resetBoard();
                                 updateBoard();
                             }
                             else{
@@ -238,7 +238,7 @@ public class GameGUI {
             return allButtons;
         }
 
-        public gameFrame(Square[][] squares) {
+        public gameFrame(Quadrat[][] squares) {
             setLayout(new GridBagLayout());
             GridBagConstraints gb = new GridBagConstraints();
             for (int row = 0; row <= 7; row++) {
@@ -251,8 +251,8 @@ public class GameGUI {
                     button.setBorderPainted(false);
                     button.setPreferredSize(new Dimension(80, 80));
 
-                    Square square;
-                    if (boardController.getCurrentPlayer() == PlayerType.BLACK) {
+                    Quadrat square;
+                    if (brettkontroller.getCurrentPlayer() == PlayerType.BLACK) {
                         square = squares[row][col];
                     } else {
                         square = squares[row][7 - col];

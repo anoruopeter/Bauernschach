@@ -5,47 +5,51 @@
 package piece;
 
 import player.PlayerType;
-import game.Coordinate;
+import game.Koordinaten;
 
 
-public class Bauer extends Piece {
+public class Bauer{
 
+    private PlayerType player;
 
     public Bauer(PlayerType player) {
-        super(player);
+        this.player = player;
     }
 
-    @Override
-    public boolean ValidMove(Coordinate initPos, Coordinate finalPos) {
-        if (initPos.equals(finalPos)) {
+    public PlayerType getPlayer(){
+        return player;
+    }
+
+    public boolean ValidMove(Koordinaten initialPos, Koordinaten finalPos) {
+        if (initialPos.equals(finalPos)) {
             return false;
         }
 
-        if (Math.abs(initPos.getY() - finalPos.getY()) == 1 && Math.abs(initPos.getX() - finalPos.getX()) == 0) {
+        if (Math.abs(initialPos.getY() - finalPos.getY()) == 1 && Math.abs(initialPos.getX() - finalPos.getX()) == 0) {
 
             if (this.getPlayer() == PlayerType.WHITE) {
-                if (initPos.getY() < finalPos.getY()) {
+                if (initialPos.getY() < finalPos.getY()) {
                     return true;
                 }
             }
 
             if (this.getPlayer() == PlayerType.BLACK) {
-                if (initPos.getY() > finalPos.getY()) {
+                if (initialPos.getY() > finalPos.getY()) {
                     return true;
                 }
             }
 
         }
 
-        if (Math.abs(initPos.getY() - finalPos.getY()) == 2 && Math.abs(initPos.getX() - finalPos.getX()) == 0 && (initPos.getY() == 1 || initPos.getY() == 6)) {
+        if (Math.abs(initialPos.getY() - finalPos.getY()) == 2 && Math.abs(initialPos.getX() - finalPos.getX()) == 0 && (initialPos.getY() == 1 || initialPos.getY() == 6)) {
 
             if (this.getPlayer() == PlayerType.WHITE) {
-                if (initPos.getY() < finalPos.getY()) {
+                if (initialPos.getY() < finalPos.getY()) {
                     return true;
                 }
             }
             if (this.getPlayer() == PlayerType.BLACK) {
-                if (initPos.getY() > finalPos.getY()) {
+                if (initialPos.getY() > finalPos.getY()) {
                     return true;
                 }
             }
@@ -55,18 +59,17 @@ public class Bauer extends Piece {
         return false;
     }
 
-    @Override
-    public Coordinate[] getPath(Coordinate initPos, Coordinate finalPos) {
+    public Koordinaten[] getPath(Koordinaten initialPos, Koordinaten finalPos) {
 
-        if (initPos.getX() != finalPos.getX()){
-            return new Coordinate[]{initPos,finalPos};
+        if (initialPos.getX() != finalPos.getX()){
+            return new Koordinaten[]{initialPos,finalPos};
         }
 
-        int pathLength = Math.abs(initPos.getY() - finalPos.getY()) + 1;
-        Coordinate[] path = new Coordinate[pathLength];
+        int pathLength = Math.abs(initialPos.getY() - finalPos.getY()) + 1;
+        Koordinaten[] path = new Koordinaten[pathLength];
 
-        for (int cnt = 0; cnt < pathLength; cnt++) {
-            path[cnt] = new Coordinate(initPos.getX(), Math.min(initPos.getY(), finalPos.getY()) + cnt);
+        for (int plc = 0; plc < pathLength; plc++) {
+            path[plc] = new Koordinaten(initialPos.getX(), Math.min(initialPos.getY(), finalPos.getY()) + plc);
         }
 
         return path;

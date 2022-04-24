@@ -5,10 +5,10 @@
 package game;
 public class Move {
 
-    public Move(Square captureSquare) {
-        if(captureSquare!=null){
-            captureSquare.getBauer();
-            captureSquare.getCoordinate();
+    public Move(Quadrat captureQuadrat) {
+        if(captureQuadrat != null){
+            captureQuadrat.getBauer();
+            captureQuadrat.getKoordinaten();
         }
     }
 }

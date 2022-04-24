@@ -6,19 +6,19 @@ package game;
 
 
 
-public class Coordinate {
+public class Koordinaten {
     int positionX;
     int positionY;
 
 
-    public Coordinate(int x, int y) {
+    public Koordinaten(int x, int y) {
         positionX = x;
         positionY = y;
 
     }
 
 
-    public boolean isValidCoordinate() {
+    public boolean isValidKoordinaten() {
         if ((positionX >= 0 && positionX < 8) && (positionY >= 0 && positionY < 8)) {
             return true;
         }
@@ -43,8 +43,8 @@ public class Coordinate {
     }
 
 
-    public boolean equals(Coordinate coordinate) {
-        if ((positionX == coordinate.getX()) && (positionY == coordinate.getY())) {
+    public boolean equals(Koordinaten koordinate) {
+        if ((positionX == koordinate.getX()) && (positionY == koordinate.getY())) {
             return true;
         }
         return false;
